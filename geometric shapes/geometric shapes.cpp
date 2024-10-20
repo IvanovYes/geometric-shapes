@@ -2,9 +2,19 @@
 
 class Shape
 {
+private:
+    std::string idShape;
 public:
     virtual double area() const = 0;
     virtual double perimeter() const = 0;
+    Shape(std::string _idShape = "Shape") : idShape{_idShape}
+    {}
+
+    std::string getId()
+    {
+        return idShape;
+    }
+
     virtual ~Shape() = default;
 };
 
@@ -15,7 +25,8 @@ private:
     double width;
 
 public:
-    Rectangule(double _hight = 5, double _width = 4) : hight{ _hight }, width{ _width }
+    Rectangule(const double& _hight = 5, const double& _width = 4, std::string _idShape = "прямоугольника ") :
+        hight { _hight }, width{ _width }, Shape{ _idShape }
     {}
 
     double area() const override
@@ -34,7 +45,8 @@ class Circle : public Shape
 private:
     double radius;
 public:
-    Circle(double _radius = 7) : radius { _radius }
+    Circle(const double& _radius = 7, std::string _idShape = "круга ") :
+        radius{ _radius }, Shape{ _idShape }
     {}
 
     double area() const override
@@ -50,14 +62,20 @@ public:
 
 void printShapeInfo(Shape* figure)
 {
-    std::cout << figure->area() << '\n';
-    std::cout << figure->perimeter() << '\n';
+    std::cout << "Площадь" << figure->getId() << "равна: " << figure->area() << '\n';
+    std::cout << "Периметр" << figure->getId() << "равен: " << figure->perimeter() << '\n';
 }
 
 int main()
 {
-    Shape* rectangule = new Rectangule{};
-    Shape* circle = new Circle{};
+    double hight;
+    double width;
+    double radius;
+    std::cout << "Последовательно введите 3 значения: длины, ширины прямоугольника и радиуса круг \n";
+    std::cin >> hight >> width >> radius;
+    // В дальнейшем тут будет реализован обраотчик ошибок пользовательского ввода
+    Shape* rectangule = new Rectangule{ hight, width};
+    Shape* circle = new Circle{ radius};
     printShapeInfo(rectangule);
     printShapeInfo(circle);
     delete rectangule;
