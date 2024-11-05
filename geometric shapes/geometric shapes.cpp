@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <limits>
 
 class Shape
 {
@@ -66,20 +67,43 @@ void printShapeInfo(Shape* figure)
     std::cout << "Периметр" << figure->getId() << "равен: " << figure->perimeter() << '\n';
 }
 
+void ignoreLine()
+{
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+void getInputData(double& outHight, double& outWidth, double& outRadius)
+{
+    while (true) // Loop until user enters a valid input
+    {
+        std::cout << "Последовательно введите 3 значения: длины, ширины прямоугольника и радиус круга \n";
+        std::cin >> outHight >> outWidth >> outRadius;
+
+        if (!std::cin and outHight < 0 and outWidth < 0 and outRadius < 0) // If the previous extraction failed
+        {
+            // Let's handle the failure
+            std::cout << "Данные введены некорректно \n";
+            std::cin.clear(); // Put us back in 'normal' operation mode
+            ignoreLine();     // And remove the bad input
+            continue;
+        }
+
+        // Our extraction succeeded
+        ignoreLine(); // Ignore any additional input on this line
+    }
+}
+
 int main()
 {
     double hight;
     double width;
     double radius;
-    std::cout << "Последовательно введите 3 значения: длины, ширины прямоугольника и радиуса круг \n";
-    std::cin >> hight >> width >> radius;
-    // В дальнейшем тут будет реализован обраотчик ошибок пользовательского ввода
+    getInputData(hight, width, radius);
     Shape* rectangule = new Rectangule{ hight, width};
     Shape* circle = new Circle{ radius};
     printShapeInfo(rectangule);
     printShapeInfo(circle);
     delete rectangule;
     delete circle;
-
     return 0;
 }
